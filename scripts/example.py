@@ -2,6 +2,7 @@
 # Licensed under the terms of the Apache License, Version 2.0. See the LICENSE file associated with the project for terms.
 import sys
 import os
+import struct
 
 # Add the lopq module - not needed if they are available in the python environment
 sys.path.append(os.path.abspath('../python'))
@@ -9,17 +10,31 @@ sys.path.append(os.path.abspath('../python'))
 import numpy as np
 from sklearn.cross_validation import train_test_split
 
-from lopq import LOPQModel, LOPQSearcher
-from lopq.eval import compute_all_neighbors, get_recall
-from lopq.model import eigenvalue_allocation
+from python.lopq import LOPQModel, LOPQSearcher
+from python.lopq.eval import compute_all_neighbors, get_recall
+from python.lopq.model import eigenvalue_allocation
 
 
 def load_oxford_data():
-    from lopq.utils import load_xvecs
-
+    from python.lopq.utils import load_xvecs
     data = load_xvecs('../data/oxford/oxford_features.fvecs')
     return data
 
+def load_data(feature_file, path_file):
+    data = {}
+    num = 2201301
+    fea_dim = 256
+    with open(path_file) as pf:
+        file_paths = [i.strip() for i in pf.readlines()]
+    with open(feature_file, 'rb') as f:
+        # db_num = np.uint32(struct.unpack('i', f.read(4)) )[0]
+        # db_fea_size = np.uint32(struct.unpack('i', f.read(4)))[0]
+        A = np.zeros((num, fea_dim), 'float32')
+        for i in xrange(num):
+            print i
+            for j in xrange(fea_dim):
+                A[i, j] = np.float32(struct.unpack('f', f.read(4)))[0]
+            data[i] = A[i]
 
 def pca(data):
     """

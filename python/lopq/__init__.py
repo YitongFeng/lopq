@@ -4,6 +4,6 @@ import model
 import search
 import utils
 from .model import LOPQModel
-from .search import LOPQSearcher, multisequence
+from .search import LOPQSearcher, multisequence, LOPQSearcherBase
 
-__all__ = [LOPQModel, LOPQSearcher, multisequence, model, search, utils]
+__all__ = [LOPQModel, LOPQSearcher, LOPQSearcherBase, multisequence, model, search, utils]
