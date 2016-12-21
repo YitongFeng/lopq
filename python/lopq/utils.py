@@ -179,6 +179,8 @@ def compute_codes_parallel(data, model, num_procs=4):
 
     N = len(data)
     partitions = [data[a:b] for a, b in get_chunk_ranges(N, num_procs)]
-    codes = parmap(compute_partition, partitions, num_procs)
-
+    # codes = parmap(compute_partition, partitions, num_procs)
+    codes = map(compute_partition, partitions)
+    # np_codes = np.array(codes)
+    # np.save('lopq_c9.txt', np_codes)
     return chain(*codes)
